@@ -18,6 +18,8 @@ class BetterPlayerControlsConfiguration {
     this.fullscreenDisableIcon = Icons.fullscreen_exit_outlined,
     this.skipBackIcon = Icons.replay_10_outlined,
     this.skipForwardIcon = Icons.forward_10_outlined,
+    this.nextIcon = Icons.skip_next_outlined,
+    this.previousIcon = Icons.skip_previous_outlined,
     this.enableFullscreen = true,
     this.enableMute = true,
     this.enableProgressText = true,
@@ -25,6 +27,12 @@ class BetterPlayerControlsConfiguration {
     this.enableProgressBarDrag = true,
     this.enablePlayPause = true,
     this.enableSkips = true,
+    this.enableNext = false,
+    this.enablePrevious = false,
+    this.goNext,
+    this.goPrevious,
+    this.checkCanGoNext,
+    this.checkCanGoPrevious,
     this.enableAudioTracks = true,
     this.progressBarPlayedColor = Colors.white,
     this.progressBarHandleColor = Colors.white,
@@ -118,6 +126,12 @@ class BetterPlayerControlsConfiguration {
   ///Cupertino only icon, icon of forward
   final IconData skipForwardIcon;
 
+  ///Icon of next video
+  final IconData nextIcon;
+
+  ///Icon of previous video
+  final IconData previousIcon;
+
   ///Flag used to enable/disable fullscreen
   final bool enableFullscreen;
 
@@ -138,6 +152,12 @@ class BetterPlayerControlsConfiguration {
 
   ///Flag used to enable skip forward and skip back
   final bool enableSkips;
+
+  ///Flag used to enable/disable next video
+  final bool enableNext;
+
+  ///Flag used to enable/disable previous video
+  final bool enablePrevious;
 
   ///Progress bar played color
   final Color progressBarPlayedColor;
@@ -243,4 +263,16 @@ class BetterPlayerControlsConfiguration {
 
   ///Color of text in bottom modal sheet used for overflow menu items.
   final Color overflowModalTextColor;
+
+  ///Callback used to go to next video
+  final void Function()? goNext;
+
+  ///Callback used to go to previous video
+  final void Function()? goPrevious;
+
+  ///Callback used to check if next video is available
+  final bool Function()? checkCanGoNext;
+
+  ///Callback used to check if previous video is available
+  final bool Function()? checkCanGoPrevious;
 }

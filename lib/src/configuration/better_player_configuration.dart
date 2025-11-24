@@ -41,6 +41,10 @@ class BetterPlayerConfiguration {
     this.autoDispose = true,
     this.expandToFill = true,
     this.useRootNavigator = false,
+    this.goNext,
+    this.goPrevious,
+    this.checkCanGoNext,
+    this.checkCanGoPrevious,
   });
 
   /// Play the video as soon as it's displayed
@@ -154,6 +158,18 @@ class BetterPlayerConfiguration {
   ///Default value is false.
   final bool useRootNavigator;
 
+  ///Callback used to go to next video
+  final void Function()? goNext;
+
+  ///Callback used to go to previous video
+  final void Function()? goPrevious;
+
+  ///Callback used to check if next video is available
+  final bool Function()? checkCanGoNext;
+
+  ///Callback used to check if previous video is available
+  final bool Function()? checkCanGoPrevious;
+
   BetterPlayerConfiguration copyWith({
     double? aspectRatio,
     bool? autoPlay,
@@ -184,6 +200,10 @@ class BetterPlayerConfiguration {
     bool? autoDispose,
     bool? expandToFill,
     bool? useRootNavigator,
+    void Function()? goNext,
+    void Function()? goPrevious,
+    bool Function()? checkCanGoNext,
+    bool Function()? checkCanGoPrevious,
   }) => BetterPlayerConfiguration(
     aspectRatio: aspectRatio ?? this.aspectRatio,
     autoPlay: autoPlay ?? this.autoPlay,
@@ -214,5 +234,9 @@ class BetterPlayerConfiguration {
     autoDispose: autoDispose ?? this.autoDispose,
     expandToFill: expandToFill ?? this.expandToFill,
     useRootNavigator: useRootNavigator ?? this.useRootNavigator,
+    goNext: goNext ?? this.goNext,
+    goPrevious: goPrevious ?? this.goPrevious,
+    checkCanGoNext: checkCanGoNext ?? this.checkCanGoNext,
+    checkCanGoPrevious: checkCanGoPrevious ?? this.checkCanGoPrevious,
   );
 }

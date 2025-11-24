@@ -307,9 +307,11 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              if (_controlsConfiguration.enablePrevious) Expanded(child: _buildPreviousButton()) else const SizedBox(),
               if (_controlsConfiguration.enableSkips) Expanded(child: _buildSkipButton()) else const SizedBox(),
               Expanded(child: _buildReplayButton(_controller!)),
               if (_controlsConfiguration.enableSkips) Expanded(child: _buildForwardButton()) else const SizedBox(),
+              if (_controlsConfiguration.enableNext) Expanded(child: _buildNextButton()) else const SizedBox(),
             ],
           ),
   );
@@ -589,4 +591,34 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
     return CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(_controlsConfiguration.loadingColor));
   }
+
+  Widget _buildPreviousButton() => _buildHitAreaClickableButton(
+    icon: Icon(
+      _controlsConfiguration.previousIcon,
+      size: 24,
+      color: _controlsConfiguration.checkCanGoPrevious?.call() ?? true
+          ? _controlsConfiguration.iconsColor
+          : _controlsConfiguration.iconsColor.withOpacity(0.5),
+    ),
+    onClicked: () {
+      if (_controlsConfiguration.checkCanGoPrevious?.call() ?? true) {
+        _controlsConfiguration.goPrevious?.call();
+      }
+    },
+  );
+
+  Widget _buildNextButton() => _buildHitAreaClickableButton(
+    icon: Icon(
+      _controlsConfiguration.nextIcon,
+      size: 24,
+      color: _controlsConfiguration.checkCanGoNext?.call() ?? true
+          ? _controlsConfiguration.iconsColor
+          : _controlsConfiguration.iconsColor.withOpacity(0.5),
+    ),
+    onClicked: () {
+      if (_controlsConfiguration.checkCanGoNext?.call() ?? true) {
+        _controlsConfiguration.goNext?.call();
+      }
+    },
+  );
 }
