@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:better_player_plus/src/controls/better_player_clickable_widget.dart';
-import 'package:better_player_plus/src/core/better_player_utils.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -243,7 +242,13 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   void _showQualitiesSelectionWidget() {
     // HLS / DASH
     final List<String> asmsTrackNames = betterPlayerController!.betterPlayerDataSource!.asmsTrackNames ?? [];
-    final List<BetterPlayerAsmsTrack> asmsTracks = betterPlayerController!.betterPlayerAsmsTracks;
+    final List<BetterPlayerAsmsTrack> asmsTracks = List.from(betterPlayerController!.betterPlayerAsmsTracks);
+    if (asmsTracks.length > 1) {
+      final BetterPlayerAsmsTrack first = asmsTracks.removeAt(0);
+      asmsTracks
+        ..sort((a, b) => (b.height ?? 0).compareTo(a.height ?? 0))
+        ..insert(0, first);
+    }
     final List<Widget> children = [];
     for (var index = 0; index < asmsTracks.length; index++) {
       final track = asmsTracks[index];
@@ -273,11 +278,8 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   }
 
   Widget _buildTrackRow(BetterPlayerAsmsTrack track, String? preferredName) {
-    final int width = track.width ?? 0;
     final int height = track.height ?? 0;
-    final int bitrate = track.bitrate ?? 0;
-    final String mimeType = (track.mimeType ?? '').replaceAll('video/', '');
-    final String trackName = preferredName ?? '${width}x$height ${BetterPlayerUtils.formatBitrate(bitrate)} $mimeType';
+    final String trackName = preferredName ?? '${height}p';
 
     final BetterPlayerAsmsTrack? selectedTrack = betterPlayerController!.betterPlayerAsmsTrack;
     final bool isSelected = selectedTrack != null && selectedTrack == track;
@@ -387,15 +389,16 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
 
   void _showCupertinoModalBottomSheet(List<Widget> children) {
     showCupertinoModalPopup<void>(
-      barrierColor: Colors.transparent,
+      barrierColor: Colors.black38,
       context: context,
       useRootNavigator: betterPlayerController?.betterPlayerConfiguration.useRootNavigator ?? false,
       builder: (context) => SafeArea(
         top: false,
+        bottom: false,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.only(left: 4, right: 4, top: 8, bottom: 20),
             decoration: BoxDecoration(
               color: betterPlayerControlsConfiguration.overflowModalColor,
               /*shape: RoundedRectangleBorder(side: Bor,borderRadius: 24,)*/
@@ -410,15 +413,17 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
 
   void _showMaterialBottomSheet(List<Widget> children) {
     showModalBottomSheet<void>(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black38,
+      barrierColor: Colors.black38,
       context: context,
       useRootNavigator: betterPlayerController?.betterPlayerConfiguration.useRootNavigator ?? false,
       builder: (context) => SafeArea(
         top: false,
+        bottom: false,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+            padding: const EdgeInsets.only(left: 4, right: 4, top: 8, bottom: 20),
             decoration: BoxDecoration(
               color: betterPlayerControlsConfiguration.overflowModalColor,
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
