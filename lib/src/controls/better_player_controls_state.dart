@@ -398,11 +398,11 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            padding: const EdgeInsets.only(left: 4, right: 4, top: 8, bottom: 20),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             decoration: BoxDecoration(
               color: betterPlayerControlsConfiguration.overflowModalColor,
-              /*shape: RoundedRectangleBorder(side: Bor,borderRadius: 24,)*/
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+              borderRadius: BorderRadius.circular(36),
             ),
             child: Column(children: children),
           ),
@@ -413,20 +413,20 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
 
   void _showMaterialBottomSheet(List<Widget> children) {
     showModalBottomSheet<void>(
-      backgroundColor: Colors.black38,
+      backgroundColor: Colors.transparent,
       barrierColor: Colors.black38,
       context: context,
       useRootNavigator: betterPlayerController?.betterPlayerConfiguration.useRootNavigator ?? false,
       builder: (context) => SafeArea(
         top: false,
-        bottom: false,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Container(
-            padding: const EdgeInsets.only(left: 4, right: 4, top: 8, bottom: 20),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
             decoration: BoxDecoration(
               color: betterPlayerControlsConfiguration.overflowModalColor,
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+              borderRadius: BorderRadius.circular(24),
             ),
             child: Column(children: children),
           ),
