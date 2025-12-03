@@ -14,6 +14,11 @@ class BetterPlayerTranslations {
     this.overflowMenuQuality = 'Quality',
     this.overflowMenuAudioTracks = 'Audio',
     this.qualityAuto = 'Auto',
+    this.overflowMenuFit = 'Fit',
+    this.fitDefault = 'Default',
+    this.fitFill = 'Fill',
+    this.fitFitWidth = 'Fit width',
+    this.fitFitHeight = 'Fit height',
   });
 
   factory BetterPlayerTranslations.polish() => BetterPlayerTranslations(
@@ -29,6 +34,11 @@ class BetterPlayerTranslations {
     overflowMenuQuality: 'Jakość',
     overflowMenuAudioTracks: 'Dźwięk',
     qualityAuto: 'Automatycznie',
+    overflowMenuFit: 'Dopasowanie',
+    fitDefault: 'Domyślne',
+    fitFill: 'Wypełnij',
+    fitFitWidth: 'Dopasuj szerokość',
+    fitFitHeight: 'Dopasuj wysokość',
   );
 
   factory BetterPlayerTranslations.chinese() => BetterPlayerTranslations(
@@ -45,6 +55,11 @@ class BetterPlayerTranslations {
     overflowMenuQuality: '质量',
     overflowMenuAudioTracks: '音訊',
     qualityAuto: '汽車',
+    overflowMenuFit: '适合',
+    fitDefault: '默认',
+    fitFill: '填',
+    fitFitWidth: '适应宽度',
+    fitFitHeight: '适应高度',
   );
 
   factory BetterPlayerTranslations.hindi() => BetterPlayerTranslations(
@@ -61,6 +76,11 @@ class BetterPlayerTranslations {
     overflowMenuQuality: 'गुणवत्ता',
     overflowMenuAudioTracks: 'ऑडियो',
     qualityAuto: 'ऑटो',
+    overflowMenuFit: 'फिट',
+    fitDefault: 'चूक',
+    fitFill: 'भरना',
+    fitFitWidth: 'चौड़ाई फिट करें',
+    fitFitHeight: 'ऊंचाई फिट करें',
   );
 
   factory BetterPlayerTranslations.arabic() => BetterPlayerTranslations(
@@ -77,6 +97,11 @@ class BetterPlayerTranslations {
     overflowMenuQuality: 'الجودة',
     overflowMenuAudioTracks: 'الصوت',
     qualityAuto: 'ऑटो',
+    overflowMenuFit: 'لائق بدنيا',
+    fitDefault: 'تقصير',
+    fitFill: 'ملء',
+    fitFitWidth: 'تناسب العرض',
+    fitFitHeight: 'تناسب الارتفاع',
   );
 
   factory BetterPlayerTranslations.turkish() => BetterPlayerTranslations(
@@ -93,6 +118,11 @@ class BetterPlayerTranslations {
     overflowMenuQuality: 'Kalite',
     overflowMenuAudioTracks: 'Ses',
     qualityAuto: 'Otomatik',
+    overflowMenuFit: 'Sığdır',
+    fitDefault: 'Varsayılan',
+    fitFill: 'Doldur',
+    fitFitWidth: 'Genişliğe sığdır',
+    fitFitHeight: 'Yüksekliğe sığdır',
   );
 
   factory BetterPlayerTranslations.vietnamese() => BetterPlayerTranslations(
@@ -138,4 +168,9 @@ class BetterPlayerTranslations {
   final String overflowMenuQuality;
   final String overflowMenuAudioTracks;
   final String qualityAuto;
+  final String overflowMenuFit;
+  final String fitDefault;
+  final String fitFill;
+  final String fitFitWidth;
+  final String fitFitHeight;
 }

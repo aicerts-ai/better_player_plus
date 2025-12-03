@@ -51,11 +51,13 @@ class BetterPlayerControlsConfiguration {
     this.enableQualities = true,
     this.enablePip = true,
     this.enableRetry = true,
+    this.enableScale = true,
     this.overflowMenuCustomItems = const [],
     this.overflowMenuIcon = Icons.more_vert_outlined,
     this.pipMenuIcon = Icons.picture_in_picture_outlined,
     this.playbackSpeedIcon = Icons.shutter_speed_outlined,
     this.qualitiesIcon = Icons.hd_outlined,
+    this.scaleIcon = Icons.aspect_ratio_outlined,
     this.subtitlesIcon = Icons.closed_caption_outlined,
     this.audioTracksIcon = Icons.audiotrack_outlined,
     this.overflowMenuIconsColor = Colors.black,
@@ -210,6 +212,9 @@ class BetterPlayerControlsConfiguration {
   ///Flag used to show/hide qualities
   final bool enableQualities;
 
+  ///Flag used to show/hide scale mode
+  final bool enableScale;
+
   ///Flag used to show/hide PiP mode
   final bool enablePip;
 
@@ -236,6 +241,9 @@ class BetterPlayerControlsConfiguration {
 
   ///Icon of the qualities menu item from overflow menu
   final IconData qualitiesIcon;
+
+  ///Icon of the scale menu item from overflow menu
+  final IconData scaleIcon;
 
   ///Icon of the audios menu item from overflow menu
   final IconData audioTracksIcon;

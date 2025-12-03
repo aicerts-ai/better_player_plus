@@ -92,6 +92,11 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
                   showQualitiesSelectionWidget();
                 },
               ),
+            if (betterPlayerControlsConfiguration.enableScale)
+              _buildMoreOptionsListRow(betterPlayerControlsConfiguration.scaleIcon, translations.overflowMenuFit, () {
+                Navigator.of(context).pop();
+                _showFitSelectionWidget();
+              }),
             if (betterPlayerControlsConfiguration.enableAudioTracks)
               _buildMoreOptionsListRow(
                 betterPlayerControlsConfiguration.audioTracksIcon,
@@ -314,6 +319,39 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       onTap: () {
         Navigator.of(context).pop();
         betterPlayerController!.setResolution(url);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        child: Row(
+          children: [
+            SizedBox(width: isSelected ? 8 : 16),
+            Visibility(
+              visible: isSelected,
+              child: Icon(Icons.check_outlined, color: betterPlayerControlsConfiguration.overflowModalTextColor),
+            ),
+            const SizedBox(width: 16),
+            Text(name, style: _getOverflowMenuElementTextStyle(isSelected)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showFitSelectionWidget() {
+    _showModalBottomSheet([
+      _buildFitRow(BoxFit.contain, betterPlayerController!.translations.fitDefault),
+      _buildFitRow(BoxFit.fill, betterPlayerController!.translations.fitFill),
+      _buildFitRow(BoxFit.fitWidth, betterPlayerController!.translations.fitFitWidth),
+      _buildFitRow(BoxFit.fitHeight, betterPlayerController!.translations.fitFitHeight),
+    ]);
+  }
+
+  Widget _buildFitRow(BoxFit fit, String name) {
+    final bool isSelected = betterPlayerController!.getFit() == fit;
+    return BetterPlayerMaterialClickableWidget(
+      onTap: () {
+        Navigator.of(context).pop();
+        betterPlayerController!.setOverriddenFit(fit);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
