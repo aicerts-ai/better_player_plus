@@ -53,6 +53,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   BetterPlayerControlsConfiguration get betterPlayerControlsConfiguration => _controlsConfiguration;
 
   @override
+  bool get showQualityInMoreMenu => false;
+
+  @override
   Widget build(BuildContext context) => buildLTRDirectionality(_buildMainWidget());
 
   ///Builds main widget of the controls.
@@ -172,12 +175,33 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                       _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
                     else
                       const SizedBox(),
+                    _buildQualityButton(),
                     _buildMoreButton(),
                   ],
                 ),
               ),
             )
           : const SizedBox(),
+    );
+  }
+
+  Widget _buildQualityButton() {
+    if (!_controlsConfiguration.enableQualities) {
+      return const SizedBox();
+    }
+    final selectedTrack = _betterPlayerController!.betterPlayerAsmsTrack;
+    final bool isHighDefinition =
+        selectedTrack != null && (selectedTrack.height == 720 || selectedTrack.height == 1080);
+
+    return BetterPlayerMaterialClickableWidget(
+      onTap: showQualitiesSelectionWidget,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          isHighDefinition ? Icons.hd : _controlsConfiguration.qualitiesIcon,
+          color: _controlsConfiguration.iconsColor,
+        ),
+      ),
     );
   }
 

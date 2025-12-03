@@ -19,6 +19,8 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
 
   bool controlsNotVisible = true;
 
+  bool get showQualityInMoreMenu => true;
+
   void cancelAndRestartTimer();
 
   bool isVideoFinished(VideoPlayerValue? videoPlayerValue) =>
@@ -81,13 +83,13 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
                   _showSubtitlesSelectionWidget();
                 },
               ),
-            if (betterPlayerControlsConfiguration.enableQualities)
+            if (betterPlayerControlsConfiguration.enableQualities && showQualityInMoreMenu)
               _buildMoreOptionsListRow(
                 betterPlayerControlsConfiguration.qualitiesIcon,
                 translations.overflowMenuQuality,
                 () {
                   Navigator.of(context).pop();
-                  _showQualitiesSelectionWidget();
+                  showQualitiesSelectionWidget();
                 },
               ),
             if (betterPlayerControlsConfiguration.enableAudioTracks)
@@ -239,7 +241,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   ///Build both track and resolution selection
   ///Track selection is used for HLS / DASH videos
   ///Resolution selection is used for normal videos
-  void _showQualitiesSelectionWidget() {
+  void showQualitiesSelectionWidget() {
     // HLS / DASH
     final List<String> asmsTrackNames = betterPlayerController!.betterPlayerDataSource!.asmsTrackNames ?? [];
     final List<BetterPlayerAsmsTrack> asmsTracks = List.from(betterPlayerController!.betterPlayerAsmsTracks);
