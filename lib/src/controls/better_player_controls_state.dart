@@ -295,6 +295,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       onTap: () {
         Navigator.of(context).pop();
         betterPlayerController!.setTrack(track);
+        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(trackName);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -319,6 +320,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       onTap: () {
         Navigator.of(context).pop();
         betterPlayerController!.setResolution(url);
+        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(name);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),

@@ -46,6 +46,7 @@ class BetterPlayerConfiguration {
     this.checkCanGoNext,
     this.checkCanGoPrevious,
     this.onFullScreen,
+    this.onQualitySelected,
   });
 
   /// Play the video as soon as it's displayed
@@ -177,6 +178,9 @@ class BetterPlayerConfiguration {
   ///isFullScreen - true if player is going to fullscreen, false if player is exiting fullscreen.
   final bool Function(bool isFullScreen)? onFullScreen;
 
+  ///Callback when quality is selected
+  final void Function(String trackName)? onQualitySelected;
+
   BetterPlayerConfiguration copyWith({
     double? aspectRatio,
     bool? autoPlay,
@@ -212,6 +216,7 @@ class BetterPlayerConfiguration {
     bool Function()? checkCanGoNext,
     bool Function()? checkCanGoPrevious,
     bool Function(bool isFullScreen)? onFullScreen,
+    void Function(String trackName)? onQualitySelected,
   }) => BetterPlayerConfiguration(
     aspectRatio: aspectRatio ?? this.aspectRatio,
     autoPlay: autoPlay ?? this.autoPlay,
@@ -247,5 +252,6 @@ class BetterPlayerConfiguration {
     checkCanGoNext: checkCanGoNext ?? this.checkCanGoNext,
     checkCanGoPrevious: checkCanGoPrevious ?? this.checkCanGoPrevious,
     onFullScreen: onFullScreen ?? this.onFullScreen,
+    onQualitySelected: onQualitySelected ?? this.onQualitySelected,
   );
 }
