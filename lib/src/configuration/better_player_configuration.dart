@@ -45,6 +45,7 @@ class BetterPlayerConfiguration {
     this.goPrevious,
     this.checkCanGoNext,
     this.checkCanGoPrevious,
+    this.onFullScreen,
   });
 
   /// Play the video as soon as it's displayed
@@ -170,6 +171,12 @@ class BetterPlayerConfiguration {
   ///Callback used to check if previous video is available
   final bool Function()? checkCanGoPrevious;
 
+  ///Callback used to handle fullscreen mode.
+  ///If returns true, then player will handle fullscreen mode.
+  ///If returns false, then player will not handle fullscreen mode.
+  ///isFullScreen - true if player is going to fullscreen, false if player is exiting fullscreen.
+  final bool Function(bool isFullScreen)? onFullScreen;
+
   BetterPlayerConfiguration copyWith({
     double? aspectRatio,
     bool? autoPlay,
@@ -204,6 +211,7 @@ class BetterPlayerConfiguration {
     void Function()? goPrevious,
     bool Function()? checkCanGoNext,
     bool Function()? checkCanGoPrevious,
+    bool Function(bool isFullScreen)? onFullScreen,
   }) => BetterPlayerConfiguration(
     aspectRatio: aspectRatio ?? this.aspectRatio,
     autoPlay: autoPlay ?? this.autoPlay,
@@ -238,5 +246,6 @@ class BetterPlayerConfiguration {
     goPrevious: goPrevious ?? this.goPrevious,
     checkCanGoNext: checkCanGoNext ?? this.checkCanGoNext,
     checkCanGoPrevious: checkCanGoPrevious ?? this.checkCanGoPrevious,
+    onFullScreen: onFullScreen ?? this.onFullScreen,
   );
 }
