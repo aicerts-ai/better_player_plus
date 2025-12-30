@@ -252,7 +252,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       duration: _controlsConfiguration.controlsHideTime,
       onEnd: _onPlayerHide,
       child: SizedBox(
-        height: _controlsConfiguration.controlBarHeight + 20.0,
+        height: _controlsConfiguration.controlBarHeight + 40.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -407,7 +407,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
           child: Align(
             alignment: Alignment.bottomRight,
             child: Container(
-              margin: EdgeInsets.only(bottom: _controlsConfiguration.controlBarHeight + 20, right: 24),
+              margin: EdgeInsets.only(bottom: _controlsConfiguration.controlBarHeight + 40, right: 24),
               decoration: BoxDecoration(
                 color: _controlsConfiguration.controlBarColor,
                 borderRadius: BorderRadius.circular(16),
@@ -581,10 +581,10 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   }
 
   Widget _buildProgressBar() => Expanded(
-    flex: 40,
+    flex: 60,
     child: Container(
       alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
       child: BetterPlayerMaterialVideoProgressBar(
         _controller,
         _betterPlayerController,
