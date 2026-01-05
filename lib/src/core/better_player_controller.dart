@@ -68,6 +68,8 @@ class BetterPlayerController {
       enableQualities: betterPlayerConfiguration.controlsConfiguration.enableQualities,
       enablePip: betterPlayerConfiguration.controlsConfiguration.enablePip,
       enableRetry: betterPlayerConfiguration.controlsConfiguration.enableRetry,
+      // Updated - Himanshu Amin
+      enableScale: betterPlayerConfiguration.controlsConfiguration.enableScale,
       overflowMenuCustomItems: betterPlayerConfiguration.controlsConfiguration.overflowMenuCustomItems,
       overflowMenuIcon: betterPlayerConfiguration.controlsConfiguration.overflowMenuIcon,
       pipMenuIcon: betterPlayerConfiguration.controlsConfiguration.pipMenuIcon,
