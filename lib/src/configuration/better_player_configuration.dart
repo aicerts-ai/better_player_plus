@@ -179,7 +179,7 @@ class BetterPlayerConfiguration {
   final bool Function(bool isFullScreen)? onFullScreen;
 
   ///Callback when quality is selected
-  final void Function(String trackName)? onQualitySelected;
+  final void Function(String trackName, String? trackUrl)? onQualitySelected;
 
   BetterPlayerConfiguration copyWith({
     double? aspectRatio,
@@ -216,7 +216,7 @@ class BetterPlayerConfiguration {
     bool Function()? checkCanGoNext,
     bool Function()? checkCanGoPrevious,
     bool Function(bool isFullScreen)? onFullScreen,
-    void Function(String trackName)? onQualitySelected,
+    void Function(String trackName, String? trackUrl)? onQualitySelected,
   }) => BetterPlayerConfiguration(
     aspectRatio: aspectRatio ?? this.aspectRatio,
     autoPlay: autoPlay ?? this.autoPlay,

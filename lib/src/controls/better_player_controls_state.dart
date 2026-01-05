@@ -248,8 +248,9 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   ///Resolution selection is used for normal videos
   void showQualitiesSelectionWidget() {
     // HLS / DASH
-    final List<String> asmsTrackNames = betterPlayerController!.betterPlayerDataSource!.asmsTrackNames ?? [];
     final List<BetterPlayerAsmsTrack> asmsTracks = List.from(betterPlayerController!.betterPlayerAsmsTracks);
+    final List<String> asmsTrackUrls = List.from(asmsTracks.where((e) => e.url != null).map((e) => e.url).toList());
+
     if (asmsTracks.length > 1) {
       final BetterPlayerAsmsTrack first = asmsTracks.removeAt(0);
       asmsTracks
@@ -260,13 +261,16 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
     for (var index = 0; index < asmsTracks.length; index++) {
       final track = asmsTracks[index];
 
-      String? preferredName;
+      String trackName = '';
+      String? trackUrl;
       if (track.height == 0 && track.width == 0 && track.bitrate == 0) {
-        preferredName = betterPlayerController!.translations.qualityAuto;
+        trackName = betterPlayerController!.translations.qualityAuto;
       } else {
-        preferredName = asmsTrackNames.length > index ? asmsTrackNames[index] : null;
+        final int height = track.height ?? 0;
+        trackName = '${height}p';
+        trackUrl = asmsTrackUrls.where((url) => url.split('/').last.contains(trackName)).firstOrNull;
       }
-      children.add(_buildTrackRow(asmsTracks[index], preferredName));
+      children.add(_buildTrackRow(asmsTracks[index], trackName, trackUrl));
     }
 
     // normal videos
@@ -277,17 +281,14 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
 
     if (children.isEmpty) {
       children.add(
-        _buildTrackRow(BetterPlayerAsmsTrack.defaultTrack(), betterPlayerController!.translations.qualityAuto),
+        _buildTrackRow(BetterPlayerAsmsTrack.defaultTrack(), betterPlayerController!.translations.qualityAuto, null),
       );
     }
 
     _showModalBottomSheet(children);
   }
 
-  Widget _buildTrackRow(BetterPlayerAsmsTrack track, String? preferredName) {
-    final int height = track.height ?? 0;
-    final String trackName = preferredName ?? '${height}p';
-
+  Widget _buildTrackRow(BetterPlayerAsmsTrack track, String trackName, String? trackUrl) {
     final BetterPlayerAsmsTrack? selectedTrack = betterPlayerController!.betterPlayerAsmsTrack;
     final bool isSelected = selectedTrack != null && selectedTrack == track;
 
@@ -295,7 +296,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       onTap: () {
         Navigator.of(context).pop();
         betterPlayerController!.setTrack(track);
-        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(trackName);
+        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(trackName, trackUrl);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -320,7 +321,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       onTap: () {
         Navigator.of(context).pop();
         betterPlayerController!.setResolution(url);
-        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(name);
+        betterPlayerController!.betterPlayerConfiguration.onQualitySelected?.call(name, url);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),

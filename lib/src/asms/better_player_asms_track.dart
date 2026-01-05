@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 class BetterPlayerAsmsTrack {
   const BetterPlayerAsmsTrack(
     this.id,
+    this.url,
     this.width,
     this.height,
     this.bitrate,
@@ -13,10 +14,13 @@ class BetterPlayerAsmsTrack {
     this.mimeType,
   );
 
-  factory BetterPlayerAsmsTrack.defaultTrack() => const BetterPlayerAsmsTrack('', 0, 0, 0, 0, '', '');
+  factory BetterPlayerAsmsTrack.defaultTrack() => const BetterPlayerAsmsTrack('', '', 0, 0, 0, 0, '', '');
 
   ///Id of the track
   final String? id;
+
+  ///Url of the track
+  final String? url;
 
   ///Width in px of the track
   final int? width;

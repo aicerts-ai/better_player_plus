@@ -42,7 +42,16 @@ sealed class BetterPlayerHlsUtils {
       if (parsedPlaylist is HlsMasterPlaylist) {
         for (final variant in parsedPlaylist.variants) {
           tracks.add(
-            BetterPlayerAsmsTrack('', variant.format.width, variant.format.height, variant.format.bitrate, 0, '', ''),
+            BetterPlayerAsmsTrack(
+              '',
+              variant.url.toString(),
+              variant.format.width,
+              variant.format.height,
+              variant.format.bitrate,
+              0,
+              '',
+              '',
+            ),
           );
         }
       }

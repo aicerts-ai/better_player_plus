@@ -37,6 +37,7 @@ class BetterPlayerAsmsUtils {
       }
 
       final response = await request.close();
+
       var data = '';
       await response.transform(const Utf8Decoder()).listen((content) {
         data += content;

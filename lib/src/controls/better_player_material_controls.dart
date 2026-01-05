@@ -326,6 +326,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
     color: _controlsConfiguration.controlBarColor,
     width: double.infinity,
     height: double.infinity,
+    padding: const EdgeInsets.only(bottom: 20),
     child: _betterPlayerController?.isLiveStream() ?? false
         ? const SizedBox()
         : Row(
