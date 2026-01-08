@@ -658,6 +658,14 @@ class BetterPlayerController {
     isCustomFullScreen = isFullScreen;
   }
 
+  // Video Title will display in custom full screen mode
+  String videoTitle = '';
+
+  /// Update Custom Video Title
+  void updateCustomVideoTitle(String title) {
+    videoTitle = title;
+  }
+
   ///Start video playback. Play will be triggered only if current lifecycle state
   ///is resumed.
   Future<void> play() async {

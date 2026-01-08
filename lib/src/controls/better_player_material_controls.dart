@@ -159,6 +159,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       return const SizedBox();
     }
 
+    final visibleVideoTitle =
+        betterPlayerController!.isCustomFullScreen && betterPlayerController!.videoTitle.trim().isNotEmpty;
+
     return Container(
       child: (_controlsConfiguration.enableOverflowMenu)
           ? AnimatedOpacity(
@@ -169,14 +172,29 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                 height: _controlsConfiguration.controlBarHeight,
                 width: double.infinity,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: visibleVideoTitle ? MainAxisAlignment.spaceBetween : MainAxisAlignment.end,
+                  spacing: 20,
                   children: [
-                    if (_controlsConfiguration.enablePip)
-                      _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
-                    else
-                      const SizedBox(),
-                    _buildQualityButton(),
-                    _buildMoreButton(),
+                    if (visibleVideoTitle)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          betterPlayerController!.videoTitle,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (_controlsConfiguration.enablePip)
+                          _buildPipButtonWrapperWidget(controlsNotVisible, _onPlayerHide)
+                        else
+                          const SizedBox(),
+                        _buildQualityButton(),
+                        _buildMoreButton(),
+                      ],
+                    ),
                   ],
                 ),
               ),
