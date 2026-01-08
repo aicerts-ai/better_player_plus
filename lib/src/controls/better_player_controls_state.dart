@@ -190,7 +190,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       if (bufferedEndPosition != null) {
         final difference = bufferedEndPosition - position;
 
-        if (latestValue.isPlaying && latestValue.isBuffering && difference.inMilliseconds < _bufferingInterval) {
+        if (!latestValue.isPlaying && latestValue.isBuffering && difference.inMilliseconds < _bufferingInterval) {
           return true;
         }
       }
