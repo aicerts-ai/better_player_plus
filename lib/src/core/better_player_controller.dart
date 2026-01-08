@@ -641,6 +641,23 @@ class BetterPlayerController {
     }
   }
 
+  // Flag check custom full screen
+  bool isCustomFullScreen = false;
+
+  ///Custom Enables/disables full screen mode based on current fullscreen state.
+  bool onFullScreen() {
+    isCustomFullScreen = false;
+    if (betterPlayerConfiguration.onFullScreen != null) {
+      isCustomFullScreen = betterPlayerConfiguration.onFullScreen!(!_isFullScreen);
+    }
+    return isCustomFullScreen;
+  }
+
+  ///Custom Enables/disables full screen mode based on current fullscreen state.
+  void updateCustomFullScreen(bool isFullScreen) {
+    isCustomFullScreen = isFullScreen;
+  }
+
   ///Start video playback. Play will be triggered only if current lifecycle state
   ///is resumed.
   Future<void> play() async {

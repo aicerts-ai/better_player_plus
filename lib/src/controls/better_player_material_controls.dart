@@ -298,7 +298,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Center(
             child: Icon(
-              _betterPlayerController!.isFullScreen
+              _betterPlayerController!.isCustomFullScreen
                   ? _controlsConfiguration.fullscreenDisableIcon
                   : _controlsConfiguration.fullscreenEnableIcon,
               color: _controlsConfiguration.iconsColor,
@@ -528,7 +528,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
   void _onExpandCollapse() {
     changePlayerControlsNotVisible(true);
-    _betterPlayerController!.toggleFullScreen();
+    // Use custom full screen function for auto rotate mode
+    _betterPlayerController!.onFullScreen();
+    // _betterPlayerController!.toggleFullScreen();
     _showAfterExpandCollapseTimer = Timer(_controlsConfiguration.controlsHideTime, () {
       setState(cancelAndRestartTimer);
     });
