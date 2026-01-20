@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 ///Base class for both material and cupertino controls
 abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State<T> {
-  ///Min. time of buffered video to hide loading timer (in milliseconds)
-  static const int _bufferingInterval = 20000;
+  // ///Min. time of buffered video to hide loading timer (in milliseconds)
+  // static const int _bufferingInterval = 20000;
 
   BetterPlayerController? get betterPlayerController;
 
@@ -173,28 +173,40 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
     );
   }
 
+  // Static int value to prevent dual loader. Initialize to 0.
+  int i = 0;
+
   ///Latest value can be null
   bool isLoading(VideoPlayerValue? latestValue) {
     if (latestValue != null) {
+      // increase
+      i++;
       if (!latestValue.isPlaying && latestValue.duration == null) {
+        // Set to zero if duration is null and not playing
+        i = 0;
+        return true;
+      } else
+      // Check if int value is 1 for the first time and it's buffering then true.
+      // It checks first after getting duration, so the loader will continue.
+      if (i == 1 && latestValue.isBuffering) {
         return true;
       }
 
-      final Duration position = latestValue.position;
-
+      // final Duration position = latestValue.position;
       Duration? bufferedEndPosition;
       if (latestValue.buffered.isNotEmpty) {
         bufferedEndPosition = latestValue.buffered.last.end;
       }
 
       if (bufferedEndPosition != null) {
-        final difference = bufferedEndPosition - position;
+        // final difference = bufferedEndPosition - position;
 
-        if (latestValue.isPlaying && latestValue.isBuffering && difference.inMilliseconds < _bufferingInterval) {
+        if (latestValue.isPlaying && latestValue.isBuffering) {
           return true;
         }
       }
     }
+    i++;
     return false;
   }
 
