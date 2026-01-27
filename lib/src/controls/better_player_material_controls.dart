@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:better_player_plus/src/configuration/better_player_controls_configuration.dart';
 import 'package:better_player_plus/src/controls/better_player_clickable_widget.dart';
 import 'package:better_player_plus/src/controls/better_player_controls_state.dart';
@@ -41,6 +42,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   BetterPlayerController? _betterPlayerController;
   StreamSubscription<dynamic>? _controlsVisibilityStreamSubscription;
 
+  bool _wasPlaying = false;
+  final _wasLoadingVal = ValueNotifier<bool>(false);
+
   BetterPlayerControlsConfiguration get _controlsConfiguration => widget.controlsConfiguration;
 
   @override
@@ -55,12 +59,41 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   @override
   bool get showQualityInMoreMenu => false;
 
+  Future<void> _wasLoadingListener() async {
+    if (_wasLoading) {
+      if (_wasPlaying && (_betterPlayerController?.isPlaying() ?? false)) {
+        await _betterPlayerController?.pause();
+      }
+    } else {
+      if (_wasPlaying && (_betterPlayerController?.isPlaying() != true)) {
+        await _betterPlayerController?.play();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    if (_wasPlaying && (_betterPlayerController?.isPlaying() ?? false)) {
+      _betterPlayerController?.pause();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _wasLoadingVal.addListener(_wasLoadingListener);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) => buildLTRDirectionality(_buildMainWidget());
 
   ///Builds main widget of the controls.
   Widget _buildMainWidget() {
-    _wasLoading = isLoading(_latestValue);
+    // _wasLoadingVal.value = _latestValue?.isBuffering ?? latestValue?.duration == null;
+
+    _wasLoadingVal.value = _wasLoading = isLoading(_latestValue, _wasPlaying);
+    // (_latestValue?.isPlaying != true && latestValue?.duration == null) || (_latestValue?.isBuffering ?? true);
+
+    // print('_wasloading :: $_wasLoading, ${_latestValue?.isBuffering}, ${latestValue?.duration}');
+
     if (_latestValue?.hasError ?? false) {
       return ColoredBox(color: Colors.black, child: _buildErrorWidget());
     }
@@ -104,6 +137,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   }
 
   void _dispose() {
+    _wasLoadingVal.removeListener(_wasLoadingListener);
     _controller?.removeListener(_updateState);
     _hideTimer?.cancel();
     _initTimer?.cancel();
@@ -377,12 +411,26 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
   Widget _buildSkipButton() => _buildHitAreaClickableButton(
     icon: Icon(_controlsConfiguration.skipBackIcon, size: 24, color: _controlsConfiguration.iconsColor),
-    onClicked: skipBack,
+    onClicked: () {
+      if (mounted && !_wasPlaying && (_betterPlayerController?.isPlaying() ?? false)) {
+        setState(() {
+          _wasPlaying = true;
+        });
+      }
+      skipBack();
+    },
   );
 
   Widget _buildForwardButton() => _buildHitAreaClickableButton(
     icon: Icon(_controlsConfiguration.skipForwardIcon, size: 24, color: _controlsConfiguration.iconsColor),
-    onClicked: skipForward,
+    onClicked: () {
+      if (mounted && !_wasPlaying && (_betterPlayerController?.isPlaying() ?? false)) {
+        setState(() {
+          _wasPlaying = true;
+        });
+      }
+      skipForward();
+    },
   );
 
   Widget _buildReplayButton(VideoPlayerController controller) {
@@ -565,6 +613,11 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       changePlayerControlsNotVisible(false);
       _hideTimer?.cancel();
       _betterPlayerController!.pause();
+      if (mounted) {
+        setState(() {
+          _wasPlaying = false;
+        });
+      }
     } else {
       cancelAndRestartTimer();
 
@@ -574,6 +627,13 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
           _betterPlayerController!.seekTo(Duration.zero);
         }
         _betterPlayerController!.play();
+
+        if (mounted) {
+          setState(() {
+            _wasPlaying = true;
+          });
+        }
+
         _betterPlayerController!.cancelNextVideoTimer();
       }
     }
@@ -590,7 +650,10 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
   void _updateState() {
     if (mounted) {
-      if (!controlsNotVisible || isVideoFinished(_controller!.value) || _wasLoading || isLoading(_controller!.value)) {
+      if (!controlsNotVisible ||
+          isVideoFinished(_controller!.value) ||
+          _wasLoading ||
+          isLoading(_controller!.value, _wasPlaying)) {
         setState(() {
           _latestValue = _controller!.value;
           if (isVideoFinished(_latestValue) && _betterPlayerController?.isLiveStream() == false) {
@@ -613,7 +676,15 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
           _hideTimer?.cancel();
         },
         onDragEnd: _startHideTimer,
-        onTapDown: cancelAndRestartTimer,
+        onTapDown: () async {
+          cancelAndRestartTimer();
+          if (Platform.isIOS) {
+            final speed = betterPlayerController!.videoPlayerController!.value.speed;
+            await betterPlayerController!.setSpeed(1);
+            await Future.delayed(Durations.short4, () async {});
+            await betterPlayerController!.setSpeed(speed);
+          }
+        },
         colors: BetterPlayerProgressColors(
           playedColor: _controlsConfiguration.progressBarPlayedColor,
           handleColor: _controlsConfiguration.progressBarHandleColor,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:better_player_plus/src/configuration/better_player_controls_configuration.dart';
 import 'package:better_player_plus/src/controls/better_player_controls_state.dart';
 import 'package:better_player_plus/src/controls/better_player_cupertino_progress_bar.dart';
@@ -73,7 +74,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
     const buttonPadding = 10.0;
     final isFullScreen = _betterPlayerController?.isFullScreen ?? false;
 
-    _wasLoading = isLoading(_latestValue);
+    _wasLoading = isLoading(_latestValue, false);
     final controlsColumn = Column(
       children: <Widget>[
         _buildTopBar(backgroundColor, iconColor, barHeight, buttonPadding),
@@ -493,7 +494,15 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
           _hideTimer?.cancel();
         },
         onDragEnd: _startHideTimer,
-        onTapDown: cancelAndRestartTimer,
+        onTapDown: () async {
+          cancelAndRestartTimer();
+          if (Platform.isIOS) {
+            final speed = betterPlayerController!.videoPlayerController!.value.speed;
+            await betterPlayerController!.setSpeed(1);
+            await Future.delayed(Durations.short3, () async {});
+            await betterPlayerController!.setSpeed(speed);
+          }
+        },
         colors: BetterPlayerProgressColors(
           playedColor: _controlsConfiguration.progressBarPlayedColor,
           handleColor: _controlsConfiguration.progressBarHandleColor,
@@ -544,7 +553,10 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
 
   void _updateState() {
     if (mounted) {
-      if (!controlsNotVisible || isVideoFinished(_controller!.value) || _wasLoading || isLoading(_controller!.value)) {
+      if (!controlsNotVisible ||
+          isVideoFinished(_controller!.value) ||
+          _wasLoading ||
+          isLoading(_controller!.value, false)) {
         setState(() {
           _latestValue = _controller!.value;
           if (isVideoFinished(_latestValue)) {

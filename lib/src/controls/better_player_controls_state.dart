@@ -30,27 +30,39 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       videoPlayerValue.duration!.inMilliseconds != 0 &&
       videoPlayerValue.position >= videoPlayerValue.duration!;
 
-  void skipBack() {
+  Future<void> skipBack() async {
     if (latestValue != null) {
       cancelAndRestartTimer();
       final beginning = Duration.zero.inMilliseconds;
+      final speed = latestValue!.speed;
       final skip =
           (latestValue!.position -
                   Duration(milliseconds: betterPlayerControlsConfiguration.backwardSkipTimeInMilliseconds))
               .inMilliseconds;
-      betterPlayerController!.seekTo(Duration(milliseconds: max(skip, beginning)));
+      await betterPlayerController!.seekTo(Duration(milliseconds: max(skip, beginning)));
+      if (Platform.isIOS) {
+        await betterPlayerController!.setSpeed(1);
+        await Future.delayed(Durations.short3, () async {});
+        await betterPlayerController!.setSpeed(speed);
+      }
     }
   }
 
-  void skipForward() {
+  Future<void> skipForward() async {
     if (latestValue != null) {
       cancelAndRestartTimer();
+      final speed = latestValue!.speed;
       final end = latestValue!.duration!.inMilliseconds;
       final skip =
           (latestValue!.position +
                   Duration(milliseconds: betterPlayerControlsConfiguration.forwardSkipTimeInMilliseconds))
               .inMilliseconds;
-      betterPlayerController!.seekTo(Duration(milliseconds: min(skip, end)));
+      await betterPlayerController!.seekTo(Duration(milliseconds: min(skip, end)));
+      if (Platform.isIOS) {
+        await betterPlayerController!.setSpeed(1);
+        await Future.delayed(Durations.short3, () async {});
+        await betterPlayerController!.setSpeed(speed);
+      }
     }
   }
 
@@ -176,19 +188,22 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   // Static int value to prevent dual loader. Initialize to 0.
   int i = 0;
 
+  bool _isFirstTime = true;
+
   ///Latest value can be null
-  bool isLoading(VideoPlayerValue? latestValue) {
+  bool isLoading(VideoPlayerValue? latestValue, bool isPlaying) {
     if (latestValue != null) {
       // increase
       i++;
       if (!latestValue.isPlaying && latestValue.duration == null) {
         // Set to zero if duration is null and not playing
         i = 0;
+        _isFirstTime = true;
         return true;
       } else
       // Check if int value is 1 for the first time and it's buffering then true.
       // It checks first after getting duration, so the loader will continue.
-      if (i == 1 && latestValue.isBuffering) {
+      if (i < 6 && latestValue.isBuffering) {
         return true;
       }
 
@@ -201,9 +216,23 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
       if (bufferedEndPosition != null) {
         // final difference = bufferedEndPosition - position;
 
-        if (latestValue.isPlaying && latestValue.isBuffering) {
-          return true;
+        final bufferedDuration = bufferedEndPosition.inSeconds;
+        final currentDuration = latestValue.position.inSeconds;
+        final totalDuration = latestValue.duration?.inSeconds ?? 0;
+        final difference = i < 5 ? 0 : bufferedDuration - currentDuration;
+
+        final bufferedStart = latestValue.buffered.first.start.inSeconds;
+        final isCurrentBuffer = currentDuration < bufferedStart && (bufferedStart - currentDuration > 2);
+
+        final isLoading = isPlaying && (totalDuration - currentDuration) > 5
+            ? (isCurrentBuffer || difference < 3)
+            : latestValue.isBuffering;
+
+        if (_isFirstTime && difference > 1) {
+          _isFirstTime = false;
         }
+
+        return _isFirstTime || isLoading;
       }
     }
     i++;
