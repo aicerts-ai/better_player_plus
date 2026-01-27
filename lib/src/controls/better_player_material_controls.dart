@@ -89,11 +89,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   Widget _buildMainWidget() {
     // _wasLoadingVal.value = _latestValue?.isBuffering ?? latestValue?.duration == null;
 
-    _wasLoadingVal.value = _wasLoading = isLoading(_latestValue, _wasPlaying);
-    // (_latestValue?.isPlaying != true && latestValue?.duration == null) || (_latestValue?.isBuffering ?? true);
-
-    // print('_wasloading :: $_wasLoading, ${_latestValue?.isBuffering}, ${latestValue?.duration}');
-
+    _wasLoadingVal.value = _wasLoading = isLoading(latestValue: _latestValue, isPlaying: _wasPlaying);
     if (_latestValue?.hasError ?? false) {
       return ColoredBox(color: Colors.black, child: _buildErrorWidget());
     }
@@ -653,7 +649,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       if (!controlsNotVisible ||
           isVideoFinished(_controller!.value) ||
           _wasLoading ||
-          isLoading(_controller!.value, _wasPlaying)) {
+          isLoading(latestValue: _controller!.value, isPlaying: _wasPlaying)) {
         setState(() {
           _latestValue = _controller!.value;
           if (isVideoFinished(_latestValue) && _betterPlayerController?.isLiveStream() == false) {

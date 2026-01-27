@@ -191,7 +191,7 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
   bool _isFirstTime = true;
 
   ///Latest value can be null
-  bool isLoading(VideoPlayerValue? latestValue, bool isPlaying) {
+  bool isLoading({VideoPlayerValue? latestValue, required bool isPlaying}) {
     if (latestValue != null) {
       // increase
       i++;
@@ -225,7 +225,9 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget> extends State
         final isCurrentBuffer = currentDuration < bufferedStart && (bufferedStart - currentDuration > 2);
 
         final isLoading = isPlaying && (totalDuration - currentDuration) > 5
-            ? (isCurrentBuffer || difference < 3)
+            ? Platform.isAndroid
+                  ? latestValue.isBuffering
+                  : (isCurrentBuffer || difference < 2 || latestValue.isBuffering)
             : latestValue.isBuffering;
 
         if (_isFirstTime && difference > 1) {
