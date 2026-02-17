@@ -534,7 +534,11 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   );
 
   Widget _buildPosition() {
-    final position = _latestValue != null ? _latestValue!.position : Duration.zero;
+    final position = _latestValue != null
+        ? (_latestValue!.duration != null && _latestValue!.position >= _latestValue!.duration!)
+              ? _latestValue!.duration!
+              : _latestValue!.position
+        : Duration.zero;
     final duration = _latestValue != null && _latestValue!.duration != null ? _latestValue!.duration! : Duration.zero;
 
     return Padding(
