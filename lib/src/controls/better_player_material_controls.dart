@@ -267,6 +267,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                     _controlsConfiguration.enableProgressText ? Expanded(child: _buildPosition()) : const SizedBox(),
                   const Spacer(),
                   if (_controlsConfiguration.enableMute) _buildMuteButton(_controller) else const SizedBox(),
+                  if (_controlsConfiguration.enableNotes) _buildNotesButton() else const SizedBox(),
                   if (_controlsConfiguration.enableFullscreen) _buildExpandButton() else const SizedBox(),
                 ],
               ),
@@ -449,6 +450,28 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
             (_latestValue != null && _latestValue!.volume > 0)
                 ? _controlsConfiguration.muteIcon
                 : _controlsConfiguration.unMuteIcon,
+            color: _controlsConfiguration.iconsColor,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  Widget _buildNotesButton() => BetterPlayerMaterialClickableWidget(
+    onTap: () {
+      cancelAndRestartTimer();
+      final currentPosition = _latestValue?.position ?? Duration.zero;
+      _controlsConfiguration.onNotesClicked?.call(currentPosition);
+    },
+    child: AnimatedOpacity(
+      opacity: controlsNotVisible ? 0.0 : 1.0,
+      duration: _controlsConfiguration.controlsHideTime,
+      child: ClipRect(
+        child: Container(
+          height: _controlsConfiguration.controlBarHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Icon(
+            _controlsConfiguration.notesIcon,
             color: _controlsConfiguration.iconsColor,
           ),
         ),
