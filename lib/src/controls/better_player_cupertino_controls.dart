@@ -314,6 +314,39 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
     ),
   );
 
+  GestureDetector _buildNotesButton(
+    Color backgroundColor,
+    Color iconColor,
+    double barHeight,
+    double iconSize,
+    double buttonPadding,
+  ) => GestureDetector(
+    onTap: () {
+      cancelAndRestartTimer();
+      final currentPosition = _latestValue?.position ?? Duration.zero;
+      _controlsConfiguration.onNotesClicked?.call(currentPosition);
+    },
+    child: AnimatedOpacity(
+      opacity: controlsNotVisible ? 0.0 : 1.0,
+      duration: _controlsConfiguration.controlsHideTime,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: backgroundColor),
+          child: Container(
+            height: barHeight,
+            padding: EdgeInsets.symmetric(horizontal: buttonPadding),
+            child: Icon(
+              _controlsConfiguration.notesIcon,
+              color: iconColor,
+              size: iconSize,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
   GestureDetector _buildPlayPause(VideoPlayerController controller, Color iconColor, double barHeight) =>
       GestureDetector(
         onTap: _onPlayPause,
@@ -400,6 +433,11 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
           const Spacer(),
           if (_controlsConfiguration.enableMute)
             _buildMuteButton(_controller, backgroundColor, iconColor, barHeight, iconSize, buttonPadding)
+          else
+            const SizedBox(),
+          const SizedBox(width: 4),
+          if (_controlsConfiguration.enableNotes)
+            _buildNotesButton(backgroundColor, iconColor, barHeight, iconSize, buttonPadding)
           else
             const SizedBox(),
           const SizedBox(width: 4),
