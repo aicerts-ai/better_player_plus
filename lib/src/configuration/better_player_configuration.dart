@@ -45,6 +45,7 @@ class BetterPlayerConfiguration {
     this.goPrevious,
     this.checkCanGoNext,
     this.checkCanGoPrevious,
+    this.onNotesClicked,
     this.onFullScreen,
     this.onQualitySelected,
   });
@@ -172,6 +173,10 @@ class BetterPlayerConfiguration {
   ///Callback used to check if previous video is available
   final bool Function()? checkCanGoPrevious;
 
+  ///Callback used when notes button is clicked.
+  ///The current playback position [Duration] is passed as argument.
+  final void Function(Duration position)? onNotesClicked;
+
   ///Callback used to handle fullscreen mode.
   ///If returns true, then player will handle fullscreen mode.
   ///If returns false, then player will not handle fullscreen mode.
@@ -215,6 +220,7 @@ class BetterPlayerConfiguration {
     void Function()? goPrevious,
     bool Function()? checkCanGoNext,
     bool Function()? checkCanGoPrevious,
+    void Function(Duration position)? onNotesClicked,
     bool Function(bool isFullScreen)? onFullScreen,
     void Function(String trackName)? onQualitySelected,
   }) => BetterPlayerConfiguration(
@@ -251,6 +257,7 @@ class BetterPlayerConfiguration {
     goPrevious: goPrevious ?? this.goPrevious,
     checkCanGoNext: checkCanGoNext ?? this.checkCanGoNext,
     checkCanGoPrevious: checkCanGoPrevious ?? this.checkCanGoPrevious,
+    onNotesClicked: onNotesClicked ?? this.onNotesClicked,
     onFullScreen: onFullScreen ?? this.onFullScreen,
     onQualitySelected: onQualitySelected ?? this.onQualitySelected,
   );

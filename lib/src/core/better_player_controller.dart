@@ -83,6 +83,9 @@ class BetterPlayerController {
       backgroundColor: betterPlayerConfiguration.controlsConfiguration.backgroundColor,
       overflowModalColor: betterPlayerConfiguration.controlsConfiguration.overflowModalColor,
       overflowModalTextColor: betterPlayerConfiguration.controlsConfiguration.overflowModalTextColor,
+      onNotesClicked:
+          betterPlayerConfiguration.onNotesClicked ??
+          betterPlayerConfiguration.controlsConfiguration.onNotesClicked,
     );
     _eventListeners.add(eventListener);
     if (betterPlayerDataSource != null) {
