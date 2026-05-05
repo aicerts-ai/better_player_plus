@@ -436,7 +436,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
           else
             const SizedBox(),
           const SizedBox(width: 4),
-          if (_controlsConfiguration.enableNotes && _betterPlayerController!.betterPlayerConfiguration.onNotesClicked != null)
+          if (_controlsConfiguration.enableNotes)
             _buildNotesButton(backgroundColor, iconColor, barHeight, iconSize, buttonPadding)
           else
             const SizedBox(),
