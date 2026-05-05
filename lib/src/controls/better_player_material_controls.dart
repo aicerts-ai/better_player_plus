@@ -37,6 +37,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   Timer? _showAfterExpandCollapseTimer;
   bool _displayTapped = false;
   bool _wasLoading = false;
+  bool _controlsAnimating = false;
   VideoPlayerController? _controller;
   BetterPlayerController? _betterPlayerController;
   StreamSubscription<dynamic>? _controlsVisibilityStreamSubscription;
@@ -83,7 +84,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
         }
       },
       child: AbsorbPointer(
-        absorbing: controlsNotVisible,
+        absorbing: controlsNotVisible && !_controlsAnimating,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -267,7 +268,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                     _controlsConfiguration.enableProgressText ? Expanded(child: _buildPosition()) : const SizedBox(),
                   const Spacer(),
                   if (_controlsConfiguration.enableMute) _buildMuteButton(_controller) else const SizedBox(),
-                  if (_controlsConfiguration.enableNotes) _buildNotesButton() else const SizedBox(),
+                  if (_controlsConfiguration.enableNotes && _controlsConfiguration.onNotesClicked != null) _buildNotesButton() else const SizedBox(),
                   if (_controlsConfiguration.enableFullscreen) _buildExpandButton() else const SizedBox(),
                 ],
               ),
@@ -459,9 +460,10 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
 
   Widget _buildNotesButton() => BetterPlayerMaterialClickableWidget(
     onTap: () {
-      cancelAndRestartTimer();
+      _hideTimer?.cancel();
       final currentPosition = _latestValue?.position ?? Duration.zero;
       _controlsConfiguration.onNotesClicked?.call(currentPosition);
+      cancelAndRestartTimer();
     },
     child: AnimatedOpacity(
       opacity: controlsNotVisible ? 0.0 : 1.0,
@@ -520,7 +522,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   void cancelAndRestartTimer() {
     _hideTimer?.cancel();
     _startHideTimer();
-
+    if (mounted) {
+      setState(() => _controlsAnimating = false);
+    }
     changePlayerControlsNotVisible(false);
     _displayTapped = true;
   }
@@ -586,6 +590,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
       return;
     }
     _hideTimer = Timer(const Duration(milliseconds: 3000), () {
+      if (mounted) {
+        setState(() => _controlsAnimating = true);
+      }
       changePlayerControlsNotVisible(true);
     });
   }
@@ -627,6 +634,9 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   );
 
   void _onPlayerHide() {
+    if (controlsNotVisible && mounted) {
+      setState(() => _controlsAnimating = false);
+    }
     _betterPlayerController!.toggleControlsVisibility(!controlsNotVisible);
     widget.onControlsVisibilityChanged(!controlsNotVisible);
   }
