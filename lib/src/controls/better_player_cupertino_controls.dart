@@ -323,7 +323,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   ) => GestureDetector(
     onTap: () {
       cancelAndRestartTimer();
-      final currentPosition = _latestValue?.position ?? Duration.zero;
+      final currentPosition = _betterPlayerController!.videoPlayerController?.value.position ?? Duration.zero;
       _betterPlayerController!.betterPlayerConfiguration.onNotesClicked?.call(currentPosition);
     },
     child: AnimatedOpacity(

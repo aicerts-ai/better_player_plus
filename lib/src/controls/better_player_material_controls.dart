@@ -460,7 +460,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
   Widget _buildNotesButton() => BetterPlayerMaterialClickableWidget(
     onTap: () {
       cancelAndRestartTimer();
-      final currentPosition = _latestValue?.position ?? Duration.zero;
+      final currentPosition = _betterPlayerController!.videoPlayerController?.value.position ?? Duration.zero;
       _betterPlayerController!.betterPlayerConfiguration.onNotesClicked?.call(currentPosition);
     },
     child: AnimatedOpacity(
