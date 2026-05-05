@@ -35,7 +35,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   Timer? _expandCollapseTimer;
   Timer? _initTimer;
   bool _wasLoading = false;
-  bool _controlsAnimating = false;
 
   VideoPlayerController? _controller;
   BetterPlayerController? _betterPlayerController;
@@ -103,7 +102,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
         }
       },
       child: AbsorbPointer(
-        absorbing: controlsNotVisible && !_controlsAnimating,
+        absorbing: controlsNotVisible,
         child: isFullScreen ? SafeArea(child: controlsColumn) : controlsColumn,
       ),
     );
@@ -323,10 +322,9 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
     double buttonPadding,
   ) => GestureDetector(
     onTap: () {
-      _hideTimer?.cancel();
+      cancelAndRestartTimer();
       final currentPosition = _latestValue?.position ?? Duration.zero;
       _controlsConfiguration.onNotesClicked?.call(currentPosition);
-      cancelAndRestartTimer();
     },
     child: AnimatedOpacity(
       opacity: controlsNotVisible ? 0.0 : 1.0,
@@ -488,9 +486,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   @override
   void cancelAndRestartTimer() {
     _hideTimer?.cancel();
-    if (mounted) {
-      setState(() => _controlsAnimating = false);
-    }
     changePlayerControlsNotVisible(false);
     _startHideTimer();
   }
@@ -581,9 +576,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
       return;
     }
     _hideTimer = Timer(const Duration(seconds: 3), () {
-      if (mounted) {
-        setState(() => _controlsAnimating = true);
-      }
       changePlayerControlsNotVisible(true);
     });
   }
@@ -602,9 +594,6 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
   }
 
   void _onPlayerHide() {
-    if (controlsNotVisible && mounted) {
-      setState(() => _controlsAnimating = false);
-    }
     _betterPlayerController!.toggleControlsVisibility(!controlsNotVisible);
     widget.onControlsVisibilityChanged(!controlsNotVisible);
   }
