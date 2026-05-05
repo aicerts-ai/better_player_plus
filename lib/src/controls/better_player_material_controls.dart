@@ -267,7 +267,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                     _controlsConfiguration.enableProgressText ? Expanded(child: _buildPosition()) : const SizedBox(),
                   const Spacer(),
                   if (_controlsConfiguration.enableMute) _buildMuteButton(_controller) else const SizedBox(),
-                  if (_controlsConfiguration.enableNotes) _buildNotesButton() else const SizedBox(),
+                  if (_controlsConfiguration.enableNotes && _betterPlayerController!.betterPlayerConfiguration.onNotesClicked != null) _buildNotesButton() else const SizedBox(),
                   if (_controlsConfiguration.enableFullscreen) _buildExpandButton() else const SizedBox(),
                 ],
               ),
@@ -461,7 +461,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
     onTap: () {
       cancelAndRestartTimer();
       final currentPosition = _latestValue?.position ?? Duration.zero;
-      _controlsConfiguration.onNotesClicked?.call(currentPosition);
+      _betterPlayerController!.betterPlayerConfiguration.onNotesClicked?.call(currentPosition);
     },
     child: AnimatedOpacity(
       opacity: controlsNotVisible ? 0.0 : 1.0,

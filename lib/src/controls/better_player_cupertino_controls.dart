@@ -324,7 +324,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
     onTap: () {
       cancelAndRestartTimer();
       final currentPosition = _latestValue?.position ?? Duration.zero;
-      _controlsConfiguration.onNotesClicked?.call(currentPosition);
+      _betterPlayerController!.betterPlayerConfiguration.onNotesClicked?.call(currentPosition);
     },
     child: AnimatedOpacity(
       opacity: controlsNotVisible ? 0.0 : 1.0,
@@ -436,7 +436,7 @@ class _BetterPlayerCupertinoControlsState extends BetterPlayerControlsState<Bett
           else
             const SizedBox(),
           const SizedBox(width: 4),
-          if (_controlsConfiguration.enableNotes)
+          if (_controlsConfiguration.enableNotes && _betterPlayerController!.betterPlayerConfiguration.onNotesClicked != null)
             _buildNotesButton(backgroundColor, iconColor, barHeight, iconSize, buttonPadding)
           else
             const SizedBox(),

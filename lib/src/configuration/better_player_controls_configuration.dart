@@ -36,7 +36,6 @@ class BetterPlayerControlsConfiguration {
     this.enableAudioTracks = true,
     this.enableNotes = true,
     this.notesIcon = Icons.note_alt_outlined,
-    this.onNotesClicked,
     this.progressBarPlayedColor = Colors.white,
     this.progressBarHandleColor = Colors.white,
     this.progressBarBufferedColor = Colors.white70,
@@ -233,9 +232,6 @@ class BetterPlayerControlsConfiguration {
   ///Icon of the notes button
   final IconData notesIcon;
 
-  ///Callback used when notes button is clicked.
-  ///The current playback position [Duration] is passed as argument.
-  final void Function(Duration position)? onNotesClicked;
 
   ///Custom items of overflow menu
   final List<BetterPlayerOverflowMenuItem> overflowMenuCustomItems;
