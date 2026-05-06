@@ -35,7 +35,7 @@ class BetterPlayerControlsConfiguration {
     this.checkCanGoPrevious,
     this.enableAudioTracks = true,
     this.enableNotes = true,
-    this.notesIcon = Icons.note_alt_outlined,
+    this.notesIcon = Icons.edit_note,
     this.progressBarPlayedColor = Colors.white,
     this.progressBarHandleColor = Colors.white,
     this.progressBarBufferedColor = Colors.white70,
