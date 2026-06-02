@@ -267,7 +267,7 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                     _controlsConfiguration.enableProgressText ? Expanded(child: _buildPosition()) : const SizedBox(),
                   const Spacer(),
                   if (_controlsConfiguration.enableMute) _buildMuteButton(_controller) else const SizedBox(),
-                  if (_controlsConfiguration.enableNotes) _buildNotesButton() else const SizedBox(),
+                  if (_betterPlayerController!.betterPlayerConfiguration.enableNotes) _buildNotesButton() else const SizedBox(),
                   if (_controlsConfiguration.enableFullscreen) _buildExpandButton() else const SizedBox(),
                 ],
               ),

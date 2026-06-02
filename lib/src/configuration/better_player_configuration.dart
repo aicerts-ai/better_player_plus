@@ -46,6 +46,7 @@ class BetterPlayerConfiguration {
     this.checkCanGoNext,
     this.checkCanGoPrevious,
     this.onNotesClicked,
+    this.enableNotes = true,
     this.onFullScreen,
     this.onQualitySelected,
   });
@@ -177,6 +178,10 @@ class BetterPlayerConfiguration {
   ///The current playback position [Duration] is passed as argument.
   final void Function(Duration position)? onNotesClicked;
 
+  ///Whether to show the notes button in the player controls.
+  ///Defaults to true.
+  final bool enableNotes;
+
   ///Callback used to handle fullscreen mode.
   ///If returns true, then player will handle fullscreen mode.
   ///If returns false, then player will not handle fullscreen mode.
@@ -221,6 +226,7 @@ class BetterPlayerConfiguration {
     bool Function()? checkCanGoNext,
     bool Function()? checkCanGoPrevious,
     void Function(Duration position)? onNotesClicked,
+    bool? enableNotes,
     bool Function(bool isFullScreen)? onFullScreen,
     void Function(String trackName)? onQualitySelected,
   }) => BetterPlayerConfiguration(
@@ -258,6 +264,7 @@ class BetterPlayerConfiguration {
     checkCanGoNext: checkCanGoNext ?? this.checkCanGoNext,
     checkCanGoPrevious: checkCanGoPrevious ?? this.checkCanGoPrevious,
     onNotesClicked: onNotesClicked ?? this.onNotesClicked,
+    enableNotes: enableNotes ?? this.enableNotes,
     onFullScreen: onFullScreen ?? this.onFullScreen,
     onQualitySelected: onQualitySelected ?? this.onQualitySelected,
   );
