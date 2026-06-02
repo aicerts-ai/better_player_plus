@@ -206,14 +206,15 @@ class _BetterPlayerMaterialControlsState extends BetterPlayerControlsState<Bette
                   spacing: 20,
                   children: [
                     if (visibleVideoTitle)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          betterPlayerController!.videoTitle,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(
+                            betterPlayerController!.videoTitle,
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                         ),
                       ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
