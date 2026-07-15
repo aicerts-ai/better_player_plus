@@ -778,7 +778,13 @@ class BetterPlayerController {
 
   ///Send player event to all listeners.
   void _postEvent(BetterPlayerEvent betterPlayerEvent) {
-    for (final void Function(BetterPlayerEvent)? eventListener in _eventListeners) {
+    // Iterate over a snapshot instead of the live list. A listener callback
+    // (or an async video player callback firing around dispose()) can
+    // add/remove/clear _eventListeners while this loop is running, which
+    // throws a ConcurrentModificationError on the live list.
+    final List<void Function(BetterPlayerEvent)?> listenersSnapshot =
+        List<void Function(BetterPlayerEvent)?>.of(_eventListeners);
+    for (final void Function(BetterPlayerEvent)? eventListener in listenersSnapshot) {
       if (eventListener != null) {
         eventListener(betterPlayerEvent);
       }
